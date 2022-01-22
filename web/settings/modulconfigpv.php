@@ -1033,6 +1033,7 @@
 										<option <?php if($pv2wattmodulold == "wr2_ethlovato") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit</option>
 									</optgroup>
 									<optgroup label="andere Hersteller">
+										<option <?php if($pv2wattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalpiko") echo "selected" ?> value="wr2_kostalpiko">Kostal Piko</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalpikovar2") echo "selected" ?> value="wr2_kostalpikovar2">Kostal Piko alt</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
@@ -1220,6 +1221,17 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2froniusdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2froniusip" class="col-md-4 col-form-label">WR Fronius IP</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wr2froniusip" id="wr2froniusip" value="<?php echo $wr2froniusipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.
+									</span>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
@@ -1233,6 +1245,7 @@
 								hideSection('#pv2mqttdiv');
 								hideSection('#pv2piko2');
 								hideSection('#pv2solarlogdiv');
+								hideSection('#pv2froniusdiv');
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
 									showSection('#pv2piko2');
@@ -1287,6 +1300,9 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_shelly') {
 									showSection('#pv2ipdiv');
+								}								
+								if($('#pv2wattmodul').val() == 'wr_fronius') {
+									showSection('#pv2froniusdiv');
 								}								
 							}
 							$(function() {

@@ -457,6 +457,9 @@ updateConfig(){
 	if ! grep -Fq "bezug2_solarlog_speicherv=" $ConfigFile; then
 		echo "bezug2_solarlog_speicherv=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "wr2froniusip=" $ConfigFile; then
+		echo "wr2froniusip=192.168.0.12" >> $ConfigFile
+	fi
 	if ! grep -Fq "wrfronius2ip=" $ConfigFile; then
 		echo "wrfronius2ip=none" >> $ConfigFile
 	fi
