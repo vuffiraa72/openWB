@@ -31,7 +31,7 @@ def get_topic(prefix: str) -> str:
     try:
         if prefix == "bezug":
             topic = "evu"
-        elif prefix == "pv":
+        elif prefix.startswith("pv"):
             topic = prefix
         elif prefix == "speicher":
             topic = "housebattery"
