@@ -35,17 +35,19 @@ class FroniusInverter:
     def update(self) -> float:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
-        # Rückgabewert ist die aktuelle Wirkleistung in [W].
-        params = (
-            ('Scope', 'System'),
-        )
-        response = req.get_http_session().get(
-            'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params,
-            timeout=3)
         try:
+            # Rückgabewert ist die aktuelle Wirkleistung in [W].
+            params = (('Scope', 'System'),)
+            response = req.get_http_session().get(
+                'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+                params=params,
+                timeout=3)
             power = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
         except TypeError:
             # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+            power = 0
+        except (requests.ConnectTimeout, requests.ConnectionError):
+            # Nachtmodus: WR ist ausgeschaltet
             power = 0
 
         power2 = self.__get_wr2()
@@ -70,13 +72,14 @@ class FroniusInverter:
             try:
                 params = (('Scope', 'System'),)
                 response = req.get_http_session().get(
-                    'http://' + ip_address2 + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
+                    'http://' + ip_address2 + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+                    params=params,
+                    timeout=3)
                 response.raise_for_status()
-                try:
-                    power2 = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
-                except TypeError:
-                    # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
-                    power2 = 0
+                power2 = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
+            except TypeError:
+                # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+                power2 = 0
             except (requests.ConnectTimeout, requests.ConnectionError):
                 # Nachtmodus: WR ist ausgeschaltet
                 power2 = 0
